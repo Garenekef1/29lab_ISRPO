@@ -61,3 +61,23 @@ Accept: application/json
 
 DELETE {{baseUrl}}/api/tasks/4
 Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/tasks/search?query=API
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/tasks/priority/High
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/tasks/stats
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/tasks/sorted?by=title
+Accept: application/json

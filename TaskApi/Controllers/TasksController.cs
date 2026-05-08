@@ -66,6 +66,58 @@ public class TasksController : ControllerBase
         return Ok(task);
     }
 
+    [HttpGet("search")]
+    public ActionResult<IEnumerable<TaskItem>> Search([FromQuery] string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Поисковая строка обязательна");
+        }
+
+        var result = _tasks.Where(task =>
+            task.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+            task.Description.Contains(query, StringComparison.OrdinalIgnoreCase));
+
+        return Ok(result);
+    }
+
+    [HttpGet("priority/{level}")]
+    public ActionResult<IEnumerable<TaskItem>> GetByPriority(string level)
+    {
+        var result = _tasks.Where(task =>
+            task.Priority.Equals(level, StringComparison.OrdinalIgnoreCase));
+
+        return Ok(result);
+    }
+
+    [HttpGet("stats")]
+    public IActionResult GetStats()
+    {
+        var stats = new
+        {
+            total = _tasks.Count,
+            completed = _tasks.Count(task => task.IsCompleted),
+            notCompleted = _tasks.Count(task => !task.IsCompleted),
+            highPriority = _tasks.Count(task => task.Priority == "High")
+        };
+
+        return Ok(stats);
+    }
+
+    [HttpGet("sorted")]
+    public ActionResult<IEnumerable<TaskItem>> GetSorted([FromQuery] string? by)
+    {
+        var result = by?.ToLower() switch
+        {
+            "title" => _tasks.OrderBy(task => task.Title),
+            "priority" => _tasks.OrderBy(task => task.Priority),
+            "createdat" => _tasks.OrderBy(task => task.CreatedAt),
+            _ => _tasks.OrderBy(task => task.Id)
+        };
+
+        return Ok(result);
+    }
+
     [HttpPost]
     public ActionResult<TaskItem> Create([FromBody] CreateTaskDto dto)
     {

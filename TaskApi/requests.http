@@ -1,0 +1,63 @@
+@baseUrl = http://localhost:5133
+
+GET {{baseUrl}}/api/tasks
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/tasks?completed=false
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/tasks/1
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/tasks/999
+Accept: application/json
+
+###
+
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Тестовая задача от REST Client",
+  "description": "Создана через файл requests.http",
+  "priority": "Low"
+}
+
+###
+
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "Некорректная задача",
+  "priority": "Normal"
+}
+
+###
+
+PUT {{baseUrl}}/api/tasks/4
+Content-Type: application/json
+
+{
+  "title": "Обновлённая задача",
+  "description": "Описание изменено",
+  "isCompleted": true,
+  "priority": "High"
+}
+
+###
+
+PATCH {{baseUrl}}/api/tasks/4/toggle
+Accept: application/json
+
+###
+
+DELETE {{baseUrl}}/api/tasks/4
+Accept: application/json
